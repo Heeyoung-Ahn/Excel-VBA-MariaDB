@@ -21,6 +21,6 @@ Sub writeLog(ProcedureNM As String, tableNM As String, SQLScript As String, Erro
                                     affectedCount & ", " & _
                                     user_id & ");"
 
-    executeSQL "writeLog", "database_name", strSQL, formNM, "로그기록"
+    executeSQL "writeLog", "table_name", strSQL, formNM, "로그기록"
     disconnectDB
 End Sub
