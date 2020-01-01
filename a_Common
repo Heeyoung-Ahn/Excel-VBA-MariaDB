@@ -46,7 +46,8 @@ End Sub
 '---------------------------------------------------------------------
 Sub callDBtoRS(ProcedureNM As String, tableNM As String, SQLScript As String, Optional formNM As String = "NULL", Optional JobNM As String = "NULL")
 On Error GoTo ErrHandler
-
+    
+    connectTaskDB
     Set rs = New ADODB.Recordset
     rs.CursorLocation = adUseClient
     rs.Open Source:=SQLScript, ActiveConnection:=conn, CursorType:=adOpenForwardOnly, LockType:=adLockReadOnly, Options:=adCmdText
