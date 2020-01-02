@@ -1,10 +1,11 @@
+Attribute VB_Name = "a_WriteLog"
 Option Explicit
 
 '----------------------------------------------------------------------------------------------------
-'  ë¡œê·¸ê¸°ë¡
-'    - ì—ëŸ¬ë¡œê·¸: SQLë¬¸ ì‹¤í–‰ ì‹œ ë°œìƒëœ ë¡œê·¸ë§Œ ê¸°ë¡(executeSQL, callDBtoRS)
-'    - ì•¡ì…˜ë¡œê·¸: DBì— ë³€ê²½ì„ í”„ë¡œì‹œì €(Insert, Update, Delete) ì‹¤í–‰ ì‹œ ë¡œê·¸ ê¸°ë¡
-'    - writelog(í”„ë¡œì‹œì €ëª…, í…Œì´ë¸”ëª…, SQL, ì—ëŸ¬ì½”ë“œ, í¼ì´ë¦„, ì¡ì´ë¦„, ì˜í–¥ë°›ì€ë ˆì½”ë“œìˆ˜)
+'  ·Î±×±â·Ï
+'    - ¿¡·¯·Î±×: SQL¹® ½ÇÇà ½Ã ¹ß»ıµÈ ·Î±×¸¸ ±â·Ï(executeSQL, callDBtoRS)
+'    - ¾×¼Ç·Î±×: DB¿¡ º¯°æÀ» ÇÁ·Î½ÃÀú(Insert, Update, Delete) ½ÇÇà ½Ã ·Î±× ±â·Ï
+'    - writelog(ÇÁ·Î½ÃÀú¸í, Å×ÀÌºí¸í, SQL, ¿¡·¯ÄÚµå, ÆûÀÌ¸§, ÀâÀÌ¸§, ¿µÇâ¹ŞÀº·¹ÄÚµå¼ö)
 '-----------------------------------------------------------------------------------------------------
 Sub writeLog(ProcedureNM As String, tableNM As String, SQLScript As String, ErrorCD As Integer, Optional formNM As String = "NULL", Optional JobNM As String = "NULL", _
                      Optional affectedCount As Integer = 0)
@@ -21,6 +22,8 @@ Sub writeLog(ProcedureNM As String, tableNM As String, SQLScript As String, Erro
                                     affectedCount & ", " & _
                                     user_id & ");"
 
-    executeSQL "writeLog", "log_table_name", strSQL, formNM, "ë¡œê·¸ê¸°ë¡"
+    executeSQL "writeLog", "log_table_name", strSQL, formNM, "·Î±×±â·Ï"
     disconnectDB
 End Sub
+
+
