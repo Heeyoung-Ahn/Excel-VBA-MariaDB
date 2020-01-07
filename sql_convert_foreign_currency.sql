@@ -17,7 +17,7 @@ SELECT 	a.sl_id, a.currency_un,
 	FROM financial_db.v_transaction_amt_by_slip a;
 
 -- 제3국 화폐로 환산할 경우(CROSS RATE)
--- BRL을 EUR로: BRL의 USD 환산환율 / EUR의 USD 환산환율
+-- 예) BRL을 EUR로: BRL의 USD 환산환율 / EUR의 USD 환산환율
 SELECT 	a.sl_id, a.currency_un,
 			a.transaction_ls_amt AS row_amt,
 			ROUND((CASE a.currency_un
