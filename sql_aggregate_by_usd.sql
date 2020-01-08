@@ -1,5 +1,4 @@
 -- 담당자별 예결산 금액을 달러화로 집계하는 쿼리 샘플
-
 -- 1) 집계합수에 서브쿼리로 환율을 반환하여 계산
 SELECT 	a.bs_gb, a.user_nm, COUNT(a.bs_gb), SUM(a.bs_amt_krw),
 			ROUND(SUM(a.bs_amt * 	(CASE a.currency_un
