@@ -3,14 +3,16 @@ Option Explicit
 
 Public Const Banner As String = "프로그램이름"
 Public Const ODBCDriver As String = "MariaDB ODBC 3.1 Driver"
+Public Const programv As String = "v20200205"
 Public conn As ADODB.Connection
 Public rs As New ADODB.Recordset
-Public connIP As String, connDB As String, connUN As String, connPW As String 'Task DB 연결 정보
+Public connIP As String, connDB As String, connUN As String, connPW As String '//Task DB 연결 정보
 Public user_id As Integer '사용자코드
-Public user_gb As String '사용자구분
+Public user_gb As String '사용자구분(SA, AM, MG, WP)
 Public user_nm As String '사용자이름
 Public checkLogin As Integer '로그인 여부 0: 로그인 안함, 1 = 로그인
-Public Const commonPW As String = "qaz1234" '추가 비밀번호 확인이 필요한 메뉴의 경우
+Public Const commonPW As String = "비밀번호" 'common DB 접속에 필요한 비밀번호
+Public cuCode As Integer, pjCode As Integer 'Project에서 공통으로 사용할 변수 설정
 
 '-----------------------------------------------
 '  DB연결 프로시저
@@ -28,7 +30,7 @@ End Sub
 '    - 공통계정 사용
 '-----------------------
 Sub connectCommonDB()
-    connectDB "IP_address", "Database", "common_user_nm", "common_user_pw"
+    connectDB "IP_address", "Database", "common_user_nm", commonPW
 End Sub
 
 '---------------------------------------------------
@@ -79,9 +81,9 @@ ErrHandler:
     writeLog ProcedureNM, tableNM, SQLScript, 1, formNM, JobNM '//오류코드 1
 End Function
 
-'--------------------------
+'------------------------
 '  DB 및 RS 연결 해제
-'--------------------------
+'------------------------
 Sub disconnectRS()
     On Error Resume Next
         rs.Close
@@ -103,9 +105,9 @@ Sub disconnectALL()
     On Error GoTo 0
 End Sub
 
-'------------------------------------------------
+'-----------------------------------------------
 '  SQL 패턴매칭 검색어 처리('%검색어%')
-'------------------------------------------------
+'-----------------------------------------------
 Public Function PText(argString As Variant) As String
     If argString = "" Or Len(argString) = 0 Then
         PText = "'%%'"
@@ -114,9 +116,9 @@ Public Function PText(argString As Variant) As String
     End If
 End Function
 
-'------------------------------------------------
+'--------------------------------------------
 '  SQL 스칼라매칭 검색어 처리('검색어')
-'------------------------------------------------
+'--------------------------------------------
 Public Function SText(argString As Variant) As String
     If argString = "" Or Len(argString) = 0 Then
         SText = "''"
@@ -125,9 +127,9 @@ Public Function SText(argString As Variant) As String
     End If
 End Function
 
-'--------------------
+'------------------
 '  매크로 최적화
-'--------------------
+'------------------
 Sub Optimization()
 On Error Resume Next
     With Application
@@ -138,9 +140,9 @@ On Error Resume Next
 On Error GoTo 0
 End Sub
 
-'-------------------------
+'-----------------------
 '  매크로 최적화 원복
-'-------------------------
+'-----------------------
 Sub Normal()
 On Error Resume Next
     With Application
@@ -171,17 +173,16 @@ Sub FullscreenOff()
     Application.DisplayFormulaBar = True
 End Sub
 
-'---------------------
+'--------------------
 '  엑셀화면 숨기기
-'---------------------
+'--------------------
 Sub HideExcel()
     Application.Visible = False
 End Sub
 
-'---------------------
+'--------------------
 '  엑셀화면 보이기
-'---------------------
+'--------------------
 Sub ShowExcel()
     Application.Visible = True
 End Sub
-
