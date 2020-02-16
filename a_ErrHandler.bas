@@ -2,25 +2,24 @@ Attribute VB_Name = "a_ErrHandler"
 Option Explicit
 
 '-----------------------------------------------------------------------------------------------------
-'  ì—ëŸ¬ì²˜ë¦¬: errhandle(í”„ë¡œì‹œì €ëª…, í…Œì´ë¸”ëª…, SQLë¬¸, í¼ì´ë¦„, ì‘ì—…ëª…)
-'    - ì—ëŸ¬ ë°œìƒ ë‚´ìš©ì„ ë””ë²„ê¹… í•˜ê¸° ìœ„í•´ ë©”ì‹œì§€ ë°•ìŠ¤ë¡œ í‘œì‹œ
-'    - ì—ëŸ¬ ë°œìƒì— ë”°ë¥¸ ë¡œê·¸ ê¸°ë¡ì€ DBì™€ ê´€ê³„ëœ ë‚´ìš©ë§Œ callDBroRS, executeSQLì—ì„œ ì§„í–‰
+'  ¿¡·¯Ã³¸®: errhandle(ÇÁ·Î½ÃÀú¸í, Å×ÀÌºí¸í, SQL¹®, ÆûÀÌ¸§, ÀÛ¾÷¸í)
+'    - ¿¡·¯ ¹ß»ı ³»¿ëÀ» µğ¹ö±ë ÇÏ±â À§ÇØ ¸Ş½ÃÁö ¹Ú½º·Î Ç¥½Ã
+'    - ¿¡·¯ ¹ß»ı¿¡ µû¸¥ ·Î±× ±â·ÏÀº DB¿Í °ü°èµÈ ³»¿ë¸¸ callDBroRS, executeSQL¿¡¼­ ÁøÇà
 '-----------------------------------------------------------------------------------------------------
-Sub ErrHandle(ProcedureNM As String, Optional tableNM As String = "NULL", Optional SQLScript As String = "NULL", Optional formNM As String = "NULL", Optional JobNM As String = "ê¸°íƒ€")
+Sub ErrHandle(ProcedureNM As String, Optional tableNM As String = "NULL", Optional SQLScript As String = "NULL", Optional formNM As String = "NULL", Optional JobNM As String = "±âÅ¸")
     If Err.Number <> 0 Then
-        MsgBox "ì—ëŸ¬ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤." & Space(7) & vbNewLine & _
-            " â€» ì—ëŸ¬ê°€ ë°œìƒí•œ ë‚´ìš©ì„ ìº¡ì²˜í•˜ì—¬ ê´€ë¦¬ìì—ê²Œ ë³´ë‚´ì£¼ì„¸ìš”." & vbNewLine & vbNewLine & _
-            "  â–¶ ì‘ì—…ì : " & Application.UserName & vbNewLine & _
-            "  â–¶ ì‘ì—…ì¼ì‹œ : " & Now & vbNewLine & _
-            "  â–¶ ì‘ì—…ë‚´ìš© : " & JobNM & vbNewLine & vbNewLine & _
-            "  â–¶ ì˜¤ë¥˜ ë°œìƒ vba : " & ProcedureNM & vbNewLine & _
-            "  â–¶ ì˜¤ë¥˜ ë°œìƒ í¼ : " & formNM & vbNewLine & _
-            "  â–¶ ì˜¤ë¥˜ ë°œìƒ DB : " & tableNM & vbNewLine & _
-            "  â–¶ ì˜¤ë¥˜ ë°œìƒ Script : " & SQLScript & vbNewLine & vbNewLine & vbNewLine & _
-            "  â–¶ ì—ëŸ¬ ì½”ë“œ : " & Err.Number & vbNewLine & _
-            "  â–¶ ì—ëŸ¬ ë‚´ìš© : " & Err.Description & vbNewLine & _
-            "  â–¶ ì—ëŸ¬ ì†ŒìŠ¤ : " & Err.Source
+        MsgBox "¿¡·¯°¡ ¹ß»ıÇß½À´Ï´Ù." & Space(7) & vbNewLine & _
+            " ¡Ø ¿¡·¯°¡ ¹ß»ıÇÑ ³»¿ëÀ» Ä¸Ã³ÇÏ¿© °ü¸®ÀÚ¿¡°Ô º¸³»ÁÖ¼¼¿ä." & vbNewLine & vbNewLine & _
+            "  ¢º ÀÛ¾÷ÀÚ : " & Application.UserName & vbNewLine & _
+            "  ¢º ÀÛ¾÷ÀÏ½Ã : " & Now & vbNewLine & _
+            "  ¢º ÀÛ¾÷³»¿ë : " & JobNM & vbNewLine & vbNewLine & _
+            "  ¢º ¿À·ù ¹ß»ı vba : " & ProcedureNM & vbNewLine & _
+            "  ¢º ¿À·ù ¹ß»ı Æû : " & formNM & vbNewLine & _
+            "  ¢º ¿À·ù ¹ß»ı DB : " & tableNM & vbNewLine & _
+            "  ¢º ¿À·ù ¹ß»ı Script : " & SQLScript & vbNewLine & vbNewLine & vbNewLine & _
+            "  ¢º ¿¡·¯ ÄÚµå : " & Err.Number & vbNewLine & _
+            "  ¢º ¿¡·¯ ³»¿ë : " & Err.Description & vbNewLine & _
+            "  ¢º ¿¡·¯ ¼Ò½º : " & Err.Source
     End If
 End Sub
-
 
