@@ -1,18 +1,32 @@
-Attribute VB_Name = "a_common"
+Attribute VB_Name = "A_Common"
 Option Explicit
 
-Public Const Banner As String = "프로그램이름"
-Public Const ODBCDriver As String = "MariaDB ODBC 3.1 Driver"
-Public Const programv As String = "v20200205"
-Public conn As ADODB.Connection
-Public rs As New ADODB.Recordset
-Public connIP As String, connDB As String, connUN As String, connPW As String '//Task DB 연결 정보
+Public Const Banner As String = "프로그램 명칭"
+Public Const ODBCDriver As String = "MariaDB ODBC 3.1 Driver" 'Client PC에 설치된 ODBC Driver
+Public Const programv As String = "Program Version" '프로그램 버전 관리
+Public conn As ADODB.Connection 'ADO Connection 개체 변수
+Public rs As New ADODB.Recordset 'ADO Recordset 개체 변수
+Public connIP As String, connDB As String, connUN As String, connPW As String 'Task DB 연결 정보
 Public user_id As Integer '사용자코드
 Public user_gb As String '사용자구분(SA, AM, MG, WP)
 Public user_nm As String '사용자이름
 Public checkLogin As Integer '로그인 여부 0: 로그인 안함, 1 = 로그인
-Public Const commonPW As String = "비밀번호" 'common DB 접속에 필요한 비밀번호
-Public cuCode As Integer, pjCode As Integer 'Project에서 공통으로 사용할 변수 설정
+Public Const commonPW As String = "Password" 'Common DB 비밀번호
+Public cuCode As Integer, pjCode As Integer 'Project Levle 변수
+
+'-----------------------
+'  Common DB연결
+'-----------------------
+Sub connectCommonDB()
+    connectDB "IP Address", "DB Name", "ID", commonPW
+End Sub
+
+'-------------------
+'  Task DB연결
+'-------------------
+Sub connectTaskDB()
+    connectDB connIP, connDB, connUN, connPW
+End Sub
 
 '-----------------------------------------------
 '  DB연결 프로시저
@@ -24,33 +38,15 @@ Sub connectDB(argIP As String, argDB As String, argID As String, argPW As String
     conn.Open
 End Sub
 
-'-----------------------
-'  Common DB연결
-'    - 로그인 확인
-'    - 공통계정 사용
-'-----------------------
-Sub connectCommonDB()
-    connectDB "IP_address", "Database", "common_user_nm", commonPW
-End Sub
-
-'---------------------------------------------------
-'  Task DB연결
-'    - 로그인 시 작업 DB 연결을 위한 정보 확인
-'---------------------------------------------------
-Sub connectTaskDB()
-    connectDB connIP, connDB, connUN, connPW
-End Sub
-
 '---------------------------------------------------------------------
 '  레코드셋 설정 및 데이터 반환
-'    - callDBtoRS(프로시저명, 테이블명, SQL문, 폼이름, 잡이름)
+'    - calDBtoRS(프로시저명, 테이블명, SQL문, 폼이름, 잡이름)
 '    - 오류발생 시 에러 핸들링 및 로그 기록
 '    - 오류발생 안하면 잡 수행 프로시저에서 로그 기록(필요 시)
 '---------------------------------------------------------------------
-Sub callDBtoRS(ProcedureNM As String, tableNM As String, SQLScript As String, Optional formNM As String = "NULL", Optional JobNM As String = "NULL")
+Sub callDBtoRS(ProcedureNM As String, tableNM As String, SQLScript As String, Optional formNM As String = "NULL", Optional JobNM As String = "데이터 조회")
 On Error GoTo ErrHandler
-    
-    connectTaskDB
+
     Set rs = New ADODB.Recordset
     rs.CursorLocation = adUseClient
     rs.Open Source:=SQLScript, ActiveConnection:=conn, CursorType:=adOpenForwardOnly, LockType:=adLockReadOnly, Options:=adCmdText
@@ -66,11 +62,12 @@ End Sub
 '    - executeSQL(프로시져명, 테이블명, SQL문, 폼이름(옵션), 잡이름(옵션))
 '    - SQL문 실행 결과 성공 여부를 알기 위해 영향 받은 레코드 수 검토
 '    - 오류발생 시 에러 핸들링 및 로그 기록
+'    - 오류발생 안하면 잡 수행 프로시저에서 로그 기록
 '-------------------------------------------------------------------------------------
 Public Function executeSQL(ProcedureNM As String, tableNM As String, SQLScript As String, Optional formNM As String = "NULL", Optional JobNM As String = "기타") As Long
 On Error GoTo ErrHandler
 
-    Dim affectedCount As Integer
+    Dim affectedCount As Long
     
     conn.Execute CommandText:=SQLScript, recordsaffected:=affectedCount
     executeSQL = affectedCount
@@ -81,9 +78,9 @@ ErrHandler:
     writeLog ProcedureNM, tableNM, SQLScript, 1, formNM, JobNM '//오류코드 1
 End Function
 
-'------------------------
+'--------------------------
 '  DB 및 RS 연결 해제
-'------------------------
+'--------------------------
 Sub disconnectRS()
     On Error Resume Next
         rs.Close
@@ -105,9 +102,9 @@ Sub disconnectALL()
     On Error GoTo 0
 End Sub
 
-'-----------------------------------------------
+'------------------------------------------------
 '  SQL 패턴매칭 검색어 처리('%검색어%')
-'-----------------------------------------------
+'------------------------------------------------
 Public Function PText(argString As Variant) As String
     If argString = "" Or Len(argString) = 0 Then
         PText = "'%%'"
@@ -116,9 +113,9 @@ Public Function PText(argString As Variant) As String
     End If
 End Function
 
-'--------------------------------------------
+'---------------------------------------------
 '  SQL 스칼라매칭 검색어 처리('검색어')
-'--------------------------------------------
+'---------------------------------------------
 Public Function SText(argString As Variant) As String
     If argString = "" Or Len(argString) = 0 Then
         SText = "''"
@@ -127,9 +124,9 @@ Public Function SText(argString As Variant) As String
     End If
 End Function
 
-'------------------
+'--------------------
 '  매크로 최적화
-'------------------
+'--------------------
 Sub Optimization()
 On Error Resume Next
     With Application
@@ -140,9 +137,9 @@ On Error Resume Next
 On Error GoTo 0
 End Sub
 
-'-----------------------
+'-------------------------
 '  매크로 최적화 원복
-'-----------------------
+'-------------------------
 Sub Normal()
 On Error Resume Next
     With Application
@@ -173,16 +170,16 @@ Sub FullscreenOff()
     Application.DisplayFormulaBar = True
 End Sub
 
-'--------------------
+'---------------------
 '  엑셀화면 숨기기
-'--------------------
+'---------------------
 Sub HideExcel()
     Application.Visible = False
 End Sub
 
-'--------------------
+'---------------------
 '  엑셀화면 보이기
-'--------------------
+'---------------------
 Sub ShowExcel()
     Application.Visible = True
 End Sub
